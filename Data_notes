@@ -1,0 +1,58 @@
+# Data Notes & Metric Definitions
+
+## Dataset scope
+
+- Fictional outpatient healthcare network.
+- Synthetic data; no real patients or provider organization.
+- 8 clinics and 5 departments.
+- Approximately 2,200 synthetic patient records and 7,200 appointment records.
+- Observed period: approximately September 2025–August 2026.
+
+## Tables in the source workbook
+
+| Table | Purpose |
+|---|---|
+| Clinics | Clinic reference information |
+| Departments | Department reference information |
+| Providers | Provider reference information |
+| Patients | Synthetic patient records |
+| Appointments | Appointment-level activity and outcomes |
+| Payer_Contracts | Payer contract reference information |
+| Monthly_Capacity | Available and staffed appointment slots by period |
+| Monthly_Expenses | Monthly operating expenses |
+
+Use the actual workbook's column names and data types as the definitive schema. This document describes table purpose, not every field.
+
+## Important metric distinctions
+
+| Metric | Interpretation |
+|---|---|
+| Total charges | Billed/charged amounts; not necessarily collected revenue |
+| Estimated reimbursement | Modeled or estimated reimbursement amount; not confirmed cash received |
+| Estimated direct cost | Estimated cost associated with appointments/services |
+| Operating expenses | Monthly recorded operating expenses; keep separate from estimated direct costs |
+| Staffing coverage | Staffed slots ÷ available slots |
+| Actual capacity utilization | Requires slots actually used/completed ÷ staffed slots |
+| Uncompleted appointment rate | Cancelled appointments plus no-shows divided by total appointments, using the project's status definitions |
+| Average wait | Average recorded wait days; confirm the exact date fields and definition used in the final measure |
+
+## Analytical cautions
+
+1. Do not label charges as revenue unless the source establishes that they represent recognized or collected revenue.
+2. Do not calculate profit by subtracting estimated direct costs and operating expenses from charges without validating accounting definitions and avoiding double counting.
+3. Do not call staffing coverage capacity utilization.
+4. Do not infer patient retention from cancellation/no-show status alone.
+5. Do not infer causation from two metrics moving in opposite or similar directions.
+6. Do not claim seasonality from approximately one year of observations.
+7. Confirm that clinic and department expense comparisons are supported by the grain of the monthly expense table. Avoid joining appointment-level rows directly to monthly expense rows in a way that duplicates expenses.
+8. Confirm whether patient-count visuals use distinct patient IDs rather than appointment counts.
+9. Validate the wait-time visual: if Recorded Wait Days and Actual Wait Days are two separate measures, use a clustered comparison rather than stacking them unless the measures are intentionally additive parts of one total.
+
+## Data quality
+
+The project history included checks for duplicates and data consistency. Do not claim that a specific number of duplicate appointment records was found unless that result is verified in the final workbook. The appointment IDs were previously checked and no duplicate appointment IDs were found in the reviewed data.
+
+## Reproducibility
+
+Before publishing, document the exact Power BI measures, SQL scripts, and Excel calculations that were used. Only include code that matches the final analysis.
+
